@@ -1,11 +1,11 @@
-select s.orderid OrderId,
-       s.shipmentTag,
-       --st.name [Store],
-       cast(dbo.tobdt(o.CreatedOnUtc)as smalldatetime)[CreatedOn],
-       cast(dbo.tobdt(s.reconciledon) as smalldatetime) Reconciledon,
-       sum(tr.saleprice) Ordervalue,
-       dbo.GetEnumName('ShipmentStatus',ShipmentStatus) ShipmentStatus,
-       s.deliveryFee [DeliveryFee]
+select s.orderid                                        [OrderId],
+       s.shipmentTag                                    [SipmentTag],
+       cast(dbo.tobdt(o.CreatedOnUtc)as smalldatetime)  [CreatedOn],
+       cast(dbo.tobdt(s.reconciledon) as smalldatetime) [Reconciledon],
+       sum(tr.saleprice)                                [Ordervalue],
+       dbo.GetEnumName('ShipmentStatus',ShipmentStatus) [ShipmentStatus],
+       s.deliveryFee                                    [DeliveryFee]
+
 from Shipment s
 join thingrequest tr on tr.shipmentid=s.id
 join [order] o on o.id=s.OrderId
@@ -18,6 +18,7 @@ and tr.IsReturned=0
 and tr.IsCancelled=0
 and tr.HasFailedBeforeDispatch=0
 and tr.IsMissingAfterDispatch=0
+
 group by  s.orderid,
           s.shipmentTag,
           st.name,
